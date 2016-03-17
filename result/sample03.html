@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+
+    #triangleRight {
+        width : 0 ;
+        height : 0 ;
+        border-left : 100px solid Red ;
+        border-top : 50px solid Transparent ;
+        border-bottom : 50px solid Transparent ;
+    }
+
+    #trapezoid {
+        border-bottom : 100px solid red ;
+        border-left : 50px solid ;
+        border-right : 50px solid;
+        height : 100px ;
+        width : 100px;
+        /*border-image: url("img/p100.png") 100 round;*/
+    }
+    #trapezoid2 {
+        width : 100px;
+        background: url("img/p100.png") 0 0 no-repeat;
+        height: 100px;
+        position: absolute;
+        /*transform: skew(-20deg);*/
+    }
+    #trapezoid3 {
+        width : 100px;
+        background: #fff6cc url('img/p100.png') 15px 50% no-repeat;
+        border-radius: 6px;
+        border: 1px solid #ffd100;
+        color: #000;
+        padding: 10px 10px 10px 38px;
+    }
+    </style>
+
+</head>
+<body>
+<div id = "triangleRight"> </div >
+<div id = "trapezoid"> </div >
+<div id = "trapezoid2" style="transform: skew(-20deg);"> </div >
+<div id = "trapezoid2" style="transform: skew(20deg); background-position-x:-50px;left:100px "> </div >
+<!--<div id = "trapezoid3"> </div >-->
+</body>
+</html>

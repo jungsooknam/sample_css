@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--<script src="../../js/jquery-1.11.3.js" type="text/javascript"></script>-->
+    <!--<script src="canvas.js" type="text/javascript"></script>-->
+
+    <style type="text/css">
+        body{background-color:#e8e9e9;
+            font-size: 10pt;
+        }
+        .wrap{
+            width: 800px;height:400px;
+            position:relative;left:0;top:0;
+            border:1px solid #333;
+            perspective: 1500px;
+            transform-style: preserve-3d;
+        }
+        .cylinderBox{width: 800px;height:400px;
+            transform-style: preserve-3d;
+        }
+
+        .cell{
+            float: left;
+            //border: 1px solid blue;
+            /*background: url("img/map1.png") 0 0 no-repeat;*/
+            position: absolute;
+            transform-style: preserve-3d;
+            left: 50%;
+            top:0;
+        }
+
+    </style>
+    <script type="text/javascript">
+        var cells_per_1row = 20;    // 세로줄
+        var cells_per_1col = 10;    // 가로줄
+        var cylinderBox;
+
+        var canvas;
+        var context;
+
+        function init() {
+            wrap = document.getElementById('wrap');
+            cylinderBox = document.getElementById('cylinderBox');
+            wrap.onmousemove = onMouseMoveHandler;
+            wrap.onmouseout = onMouseOutHandler;
+            initCells();
+        }
+
+        var onMouseOutHandler = function (e) {
+            cylinderBox.style.transform = "none";
+        }
+
+        var onMouseMoveHandler = function (e) {
+            var wrap_x = e.clientX;
+            var wrap_y = e.clientY;
+            cylinderBox.style.transform = "rotateY(" +wrap_x+"deg) rotateX(" +wrap_y+"deg)";
+        }
+
+        function initCells() {
+            var tag = ""
+            var cellSize = 800 / cells_per_1row;
+
+
+            var deg_a = (360 / cells_per_1row) / 2;
+            deg_a = (deg_a / 360) * (2 * Math.PI);
+            var r = (cellSize / 2)  / Math.tan(deg_a);
+
+            var deg_r = 18 //90 - ((90 / (cells_per_1col/2))*i);
+            var ang_r = (deg_r / 360) * (2 * Math.PI);
+
+
+
+            for (var i = 0 ; i<cells_per_1col ; i++){
+
+
+
+
+                for (var j= 0 ; j<cells_per_1row ; j++) {
+
+                    var style = "width:" + cellSize + "px; height:" + cellSize + "px; "
+                    var top = i /cells_per_1col * 400;
+
+
+
+                    var degx = ((9-i) *18) - 81;
+                    console.log(i, degx);
+
+                    var degy = j / cells_per_1row * 360;
+
+                    var left = j / cells_per_1row * 800;
+
+
+
+                        style += 'background-image:url("img/map1.png");';
+                        style += "background-position-y: -" + top + "px;";
+                        style += "background-position-X: -" + left + "px;";
+
+                        style += "top:" + 180 + "px;"
+                        style += "transform : translateX(-" + (cellSize / 2) + "px) rotateY(" + degy + "deg) rotateX(" + degx + "deg) translateZ(" + r + "px);";
+
+                    tag += "<div class='cell' style='"+style+"'>";
+                    //tag += i +" : "+j;
+                    tag += "</div>";
+                }
+            }
+            cylinderBox.innerHTML = tag;
+        }
+
+
+        function changeCellnum() {
+            var cellNum = document.getElementById('select').value;
+
+            console.log(cellNum);
+
+            cells_per_1row = cellNum *2;
+            cells_per_1col = cellNum;
+            initCells();
+        }
+
+    </script>
+
+</head>
+<body onload="init()">
+<div class="wrap" id="wrap" >
+    <div class="cylinderBox " id="cylinderBox"> <!--가로 800 세로 400 사이즈의 영역-->
+    </div>
+</div>
+
+세로 셀 갯수 :
+<select id="select" onchange="changeCellnum()">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+    <option selected="">10</option>
+    <option>20</option>
+</select>
+
+<br>
+
+<div style="display:none, ">
+    <!-- 색깔 -->
+    <select id="color" style="vertical-align:top;">
+        <option value="rgb(0, 0, 0)">black</option>
+        <option value="rgb(255, 0, 0)">red</option>
+        <option value="rgb(0, 255, 0)">green</option>
+        <option value="rgb(0, 0, 255)">blue</option>
+        <option value="rgb(255, 255, 0)">yellow</option>
+        <option value="rgb(255, 255, 255)">white</option>
+    </select>
+    <canvas width="800" height="400" id="canvas" style="border:1px solid black;"  ></canvas>
+</div>
+</body>
+</html>
+
