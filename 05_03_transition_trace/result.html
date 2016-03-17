@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+
+
+        <style type="text/css">
+
+            body , h1 , h2 , h3 , h4{margin:5px;padding:5px;}
+
+            .transitionBox{
+                width:400px;height:300px;
+                position:relative;left:0;top:0;
+                background-color:#cccccc;
+            }
+            .vBox{
+                width:10px;height:300px;
+                position:relative;top:0; 
+                transition-timing-function: linear;
+                transition-property: left;
+                transition-duration : 3s;
+            }          
+
+            .start{left:0%;transition-duration :0s;}
+            .start > .circle{top:100%;transition-duration :0s;}
+
+            .end{left:100%;}
+            .end > .circle{top:0%;}
+
+            .circle{
+                width:10px;height:10px;                
+                position:absolute;left:0;                    
+                transition-property: top;
+                transition-duration : 3s;
+            }
+            .circle span{width:10px;height:10px;background-color:#0000ff;display:block;
+                         border-radius:5px;position:absolute;left:-5px;top:-5px;        }
+
+/*            #rul_1 , #rul_2{width:50%;height:50%;position:absolute;left:0%;top:50%;border-right:1px solid red;border-top:1px solid red;opacity: 0.3;}
+            #rul_1 span , #rul_2 span{display:block;position:absolute;right:-3px; top:-3px;background:black;width:6px;height:6px;border-radius:50%;}
+            #rul_1{border-color:red;}
+            #rul_2{border-color:blue;}*/
+
+
+
+            .canvas{width:100%;height:100%;position:absolute;left:0;top:0;opacity:0.3;}
+            .bspan{display:inline-block;width:30px;}
+        </style>
+
+        <script type="text/javascript">
+            var x1, y1, x2, y2;
+            var circle, vBox;
+            var canvas, context;
+            function doTransition(type, val) {
+                startTrace();
+
+                switch (type) {
+                    case 'ease' :
+                    case 'linear' :
+                    case 'ease-in' :
+                    case 'ease-out' :
+                    case 'ease-in-out' :
+                    case 'step-start' :
+                    case 'step-end' :
+                    {
+                        circle.style['transition-timing-function'] = type;
+                        break;
+                    }
+                    case 'steps' :
+                    {
+                        var step = document.getElementById('select').value;
+                        circle.style['transition-timing-function'] = "steps(" + step + "    ,   " + val + ")";
+                        break;
+                    }
+                    case 'cubic-bezier' :
+                    {
+                        circle.style['transition-timing-function'] = "cubic-bezier(" + x1 + "," + y1 + "," + x2 + "," + y2 + ")";
+                        break;
+                    }
+                }
+                vBox.className = "vBox  end";
+
+            }
+            var time = 0;
+            function startTrace() {
+                time = 0;
+                traceBall();
+            }
+            function traceBall() {
+//                console.log(time);
+
+                if (time++ < 100)
+                    window.requestAnimationFrame(traceBall);
+
+                if (time == 70) {
+                    console.log(vBox);
+                }
+            }
+
+            function reset() {
+                vBox.className = "vBox  start";
+            }
+
+            function bezier() {
+                x1 = document.getElementById('x1').value;
+                y1 = document.getElementById('y1').value;
+                x2 = document.getElementById('x2').value;
+                y2 = document.getElementById('y2').value;
+                document.getElementById('bezierVal_x1').innerHTML = x1;
+                document.getElementById('bezierVal_y1').innerHTML = y1;
+                document.getElementById('bezierVal_x2').innerHTML = x2;
+                document.getElementById('bezierVal_y2').innerHTML = y2;
+
+//                document.getElementById('rul_1').style.width = (x1 * 100) + "%";
+//                document.getElementById('rul_1').style.height = (y1 * 100) + "%";
+//                document.getElementById('rul_1').style.top = (100 - (y1 * 100)) + "%";
+//
+//                document.getElementById('rul_2').style.width = (x2 * 100) + "%";
+//                document.getElementById('rul_2').style.height = (y2 * 100) + "%";
+//                document.getElementById('rul_2').style.top = (100 - (y2 * 100)) + "%";
+
+
+//                canvas.width = canvas.width;
+//                context.beginPath();
+//                context.moveTo(0, 300);
+////                x1 , y1 , x2 , y2 , endx , endy
+//
+//                var cp1x, cp1y, cp2x, cp2y;
+//                cp1x = (x1 * 400);
+//                cp1y = 300 - (y1 * 300);
+//                cp2x = (x2 * 400);
+//                cp2y = 300 - (y2 * 300);
+
+                console.log(cp1x, cp1y, cp2x, cp2y);
+
+                context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, 400, 0);
+                context.stroke();
+
+            }
+            function init()
+            {
+                if (!circle) {
+                    circle = document.getElementById('circle');
+                }
+                if (!vBox) {
+                    vBox = document.getElementById('vBox');
+                }
+//                canvas = document.getElementById('canvas');
+//                context = canvas.getContext("2d");
+
+                bezier();
+            }
+        </script>
+
+    </head>
+    <body onload="init();">
+        <div class="transitionBox ">
+            <div class="vBox   start" id="vBox">
+                <div class="circle   " id="circle"><span></span></div>
+            </div>   
+
+<!--            <div id="rul_1"><span></span></div>
+            <div id="rul_2"><span></span></div>-->
+
+            <canvas width="400" height="300"  class="canvas" id="canvas"></canvas>
+
+        </div>
+
+
+
+        <div class="control" style="position:relative;z-index:10;margin-top:10px;" >         
+            <button onclick="doTransition('ease')" > ease</button>
+            <button onclick="doTransition('linear')" > linear</button>
+            <button onclick="doTransition('ease-in')" > ease-in</button>
+            <button onclick="doTransition('ease-out')" > ease-out</button>
+            <button onclick="doTransition('ease-in-out')" > ease-in-out</button>        
+            <button onclick="doTransition('step-start')" > step-start</button>
+            <button onclick="doTransition('step-end')" > step-end</button>
+            <hr>
+            <select id="select">
+                <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            </select>
+            <button onclick="doTransition('steps', 'start')" > steps start</button>
+            <button onclick="doTransition('steps', 'end')" > steps end</button>            
+            <hr>
+
+            <span style="color: red">x1 : </span><span id="bezierVal_x1" style="color: red" class="bspan"></span>
+            <input id="x1" type="range" min="0" max="1" step="0.01" value="0.45" style="width:80px;" onchange="bezier()" onmousemove="bezier()">
+
+            <span style="color: red">y1 : </span><span id="bezierVal_y1" style="color: red" class="bspan"></span>     
+            <input id="y1" type="range" min="0" max="1" step="0.01" value="0.45" style="width:80px;" onchange="bezier()" onmousemove="bezier()">
+
+
+            <span style="color: blue">x2 : </span><span id="bezierVal_x2" style="color: blue" class="bspan"></span>
+            <input id="x2" type="range" min="0" max="1" step="0.01" value="0.55" style="width:80px;" onchange="bezier()" onmousemove="bezier()">
+
+            <span style="color: blue">y2 : </span><span id="bezierVal_y2" style="color: blue" class="bspan"></span>
+            <input id="y2" type="range" min="0" max="1" step="0.01" value="0.55" style="width:80px;" onchange="bezier()" onmousemove="bezier()">
+            <br>
+
+            <button onclick="doTransition('cubic-bezier')" > cubic-bezier</button>               
+        </div>        
+        <hr>
+        <button onclick="reset()">reset</button>
+    </body>
+</html>

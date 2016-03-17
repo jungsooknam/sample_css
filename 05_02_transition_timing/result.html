@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+
+
+        <style type="text/css">
+
+            body , h1 , h2 , h3 , h4{margin:0;padding:0;}
+
+            .wrap{background-color: #8abadb;width:550px;}
+            .wrap div{width:50px;height:50px;background-color:red;border:1px solid black;margin-top:3px;
+                      position:relative;left:0;top:0;
+                      transition-duration:3s;
+                      transition-property:left;
+            }
+
+
+        </style>
+
+        <script type="text/javascript">
+
+            function init() {
+                document.getElementById('wrap').className = "wrap start";
+            }
+        </script>
+
+    </head>
+    <body onload="init();" >
+
+        <div class="wrap" id="wrap">
+
+            <div class="ease"></div>
+            <div class="linear"></div>
+            <div class="ease-in"></div>
+            <div class="ease-out"></div>
+            <div class="ease-in-out"></div>
+            <div class="step-start"></div>
+            <div class="step-end"></div>
+            <div class="steps"></div>
+            <div class="cubic-bezier"></div>
+
+        </div>
+
+    </body>
+</html>
