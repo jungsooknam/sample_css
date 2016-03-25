@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style type="text/css">
+            
+            
+            body{background-color:#e8e9e9; }
+            .wrap{
+                width: 800px;height:400px;
+                /*border:1px solid #ff6666;*/
+                margin:10% auto;       
+                perspective: 1000px;
+                transform-style: preserve-3d;       
+
+                position:relative;left:0;top:0;
+            }
+            .cylinderBox{width: 800px;height:400px;
+                         position:absolute;left:0;top:0;               
+                         /*background-color:#dff3fe;*/
+                         cursor:pointer;
+                         transform-style: preserve-3d;                         
+                         transform: rotateX(0deg) rotateY(0deg);
+            }            
+            .cell{font-size:7px;text-align:center;float:left;                  
+                  position:absolute;left:50%;top:0;    } 
+
+             .map1 .cell{background:url(img/map1.png) ;}
+             
+            .cell span{display:none;}
+        </style>
+        <script type="text/javascript">
+            var cells_per_1row = 20;
+            var cells_per_1col = 10;
+            var cylinderBox;
+            function init() {
+                wrap = document.getElementById('wrap');
+                cylinderBox = document.getElementById('cylinderBox');                
+                wrap.onmousemove = onMouseMoveHandler;
+                
+                initCells();
+            }
+            
+            var onMouseMoveHandler = function (e) {
+                var wrap_x = e.pageX - 100;
+                var wrap_y = e.pageY - 100; 
+                var rotateY = 360 * (wrap_x / 800) - 180;
+                var rotateX = -(360 * (wrap_y / 400)) + 180;   
+                
+                rotateY = Math.round(rotateY);
+                rotateX = Math.round(rotateX);   
+                cylinderBox.style['transform'] = "rotateX(" + rotateX + "deg)  rotateY(" + (rotateY) + "deg)"; 
+            }    
+            function rotate_cylinderBoxY(rotateY, rotateX) {
+                cylinderBox.style['transform'] = "rotateX(" + rotateX + "deg)  rotateY(" + (rotateY) + "deg)";
+            }
+
+            function initCells() {
+                cylinderBox = document.getElementById('cylinderBox');
+                var cell_size = (800 / cells_per_1row) ;
+                var cell_size_for_r = cell_size;
+                
+                
+                if (cells_per_1row >= 10) {
+                    cell_size += 2;
+                }
+                        
+                        
+                var tag = "";
+                for (var i = 0; i < cells_per_1col; i++) {
+                    var top = (i / cells_per_1col) * 100 + "%;";
+                    for (var j = 0; j < cells_per_1row; j++) {
+                        var id = 'cell_' + i + '_' + j;
+                        var cls = 'cell_' + i + '_' + j;
+                        var deg = (j / cells_per_1row) * 360;
+                        var r = (cell_size_for_r / 2) / Math.tan(  (2 * Math.PI) / (2*cells_per_1row) );
+                        var back_left = (-1 * (j / cells_per_1row)) * 800 + "px;";
+                        var back_top = (-1 * (i / cells_per_1col)) * 400 + "px;";
+                        var transform = " translateX(-" + (cell_size / 2) + "px) rotateY(" + deg + "deg) translateZ(" + r + "px);  ";
+                        var style =
+                                ' width:' + cell_size + "px;" +
+                                ' height:' + cell_size + "px;" +
+                                ' top:' + top +
+                                ' transform:' + transform +
+                                ' background-position-x:' + back_left +
+                                ' background-position-y:' + back_top +
+                                '  ';
+                        tag += '     <div id="' + id + '"   class="cell ' + cls + '"  style="' + style + '">    ';
+                        tag += '     <span>   ' + i + ' , ' + j + ' </span>';
+                        tag += '     </div>  ';
+                    }
+                }
+                cylinderBox.innerHTML = tag;
+            }
+
+            function changeCellnum() {
+                var cellNum = document.getElementById('select').value;
+                console.log(cellNum);
+                cells_per_1row = cellNum * 2;
+                cells_per_1col = cellNum;
+                initCells();
+            }
+   
+
+        </script>
+    </head>
+    <body onload="init()" draggable="false" >
+
+
+        <div class="wrap" id="wrap" draggable="false">
+            <div draggable="false" class="cylinderBox map1" id="cylinderBox"> <!--가로 800 세로 400 사이즈의 영역-->
+            </div>            
+        </div>        
+
+        세로 셀 갯수. 
+        <select id="select" onchange="changeCellnum()">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option selected="">10</option>
+            <option>20</option>
+        </select>
+
+
+    </body>
+</html>
